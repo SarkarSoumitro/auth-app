@@ -1,0 +1,4 @@
+#configuration of testing
+
+server:
+  port: 8085

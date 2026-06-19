@@ -1,0 +1,4 @@
+#configuration of production
+
+server:
+  port: 8084
