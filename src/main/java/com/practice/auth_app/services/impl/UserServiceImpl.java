@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -20,7 +22,7 @@ public class UserServiceImpl implements UserService {
         if(userDto.getEmail()==null ||userDto.getEmail().isBlank()){
             throw new IllegalStateException("Email is required");
         }
-        if(userRepository.existByEmail(userDto.getEmail())){
+        if(userRepository.existsByEmail(userDto.getEmail())){
             throw new IllegalStateException("Email already exist!");
         }
         User user = modelMapper.map(userDto, User.class);
@@ -52,16 +54,24 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(String userId) {
-
+        UUID id = UUID.fromString(userId);
+        User user = userRepository.findById(id).orElseThrow(()->  new RuntimeException("user not found associate with this is "+ userId));
+        userRepository.delete(user);
     }
 
     @Override
     public UserDto getUserById(String userId) {
-        return null;
+        UUID id = UUID.fromString(userId);
+        User user = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found associate with this id "+ userId));
+        return modelMapper.map(user,UserDto.class);
     }
 
     @Override
     public Iterable<UserDto> getAllUser() {
-        return null;
+       return userRepository.
+               findAll().
+               stream().
+               map(user ->modelMapper.map(user,UserDto.class)).
+               toList();
     }
 }

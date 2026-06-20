@@ -1,5 +1,6 @@
 package com.practice.auth_app.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.practice.auth_app.entities.helpers.Provider;
 import lombok.*;
 
@@ -21,8 +22,11 @@ public class UserDto {
     private String password;
     private String image;
     private boolean enable;
-    private LocalDateTime createdAt = LocalDateTime.now();
-    private LocalDateTime updatedAt = LocalDateTime.now();
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updatedAt;
     private Provider provider=Provider.LOCAL;
     private Set<RolesDto> role = new HashSet<>();
 }
