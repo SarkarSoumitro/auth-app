@@ -3,11 +3,14 @@ package com.practice.auth_app.services.impl;
 import com.practice.auth_app.dtos.UserDto;
 import com.practice.auth_app.entities.User;
 import com.practice.auth_app.entities.helpers.Provider;
+import com.practice.auth_app.exceptions.ResourceAlreadyExistException;
+import com.practice.auth_app.exceptions.ResourceNotFoundException;
 import com.practice.auth_app.repositories.UserRepository;
 import com.practice.auth_app.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -20,10 +23,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto createUser(UserDto userDto) {
         if(userDto.getEmail()==null ||userDto.getEmail().isBlank()){
-            throw new IllegalStateException("Email is required");
+            throw new IllegalArgumentException("Email is required");
         }
         if(userRepository.existsByEmail(userDto.getEmail())){
-            throw new IllegalStateException("Email already exist!");
+            throw new ResourceAlreadyExistException("Email already exist!");
         }
         User user = modelMapper.map(userDto, User.class);
         user.setProvider(userDto.getProvider()!=null? userDto.getProvider(): Provider.LOCAL);
@@ -34,35 +37,53 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto getUserByEmail(String email) {
-        User user = userRepository.findByEmail(email).orElseThrow(()-> new RuntimeException("User not found with this email "+ email));
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new ResourceNotFoundException("User not found with this email "+ email));
         return modelMapper.map(user,UserDto.class);
     }
 
     @Override
+    @Transactional
     public UserDto updateUser(UserDto userDto, String email) {
-           User user = userRepository.findByEmail(email).orElseThrow(() -> new RuntimeException("User not found with email: " + email));
-           user.setName(userDto.getName());
-           user.setEmail(userDto.getEmail());
-           user.setPassword(userDto.getPassword());
-           user.setImage(userDto.getImage());
-           user.setEnable(userDto.isEnable());
-           user.setProvider(userDto.getProvider() != null ? userDto.getProvider() : Provider.LOCAL);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User not found with email: " + email
+                ));
 
-           User updatedUser = userRepository.save(user);
-           return modelMapper.map(updatedUser,UserDto.class);
+        String newEmail = userDto.getEmail();
+
+        if (newEmail == null || newEmail.isBlank()) {
+            throw new IllegalArgumentException("Email is required");
+        }
+
+        if (!newEmail.equals(user.getEmail()) && userRepository.existsByEmail(newEmail)) {
+            throw new ResourceAlreadyExistException(
+                    "User already exists with this email " + newEmail
+            );
+        }
+
+        user.setName(userDto.getName());
+        user.setEmail(newEmail);
+        //TODO: update pass logic ... to hashcode
+        user.setPassword(userDto.getPassword());
+        user.setImage(userDto.getImage());
+        user.setEnable(userDto.isEnable());
+        user.setProvider(userDto.getProvider() != null ? userDto.getProvider() : Provider.LOCAL);
+
+        User updatedUser = userRepository.save(user);
+        return modelMapper.map(updatedUser, UserDto.class);
     }
 
     @Override
     public void deleteUser(String userId) {
         UUID id = UUID.fromString(userId);
-        User user = userRepository.findById(id).orElseThrow(()->  new RuntimeException("user not found associate with this is "+ userId));
+        User user = userRepository.findById(id).orElseThrow(()->  new ResourceNotFoundException("user not found associate with this is "+ userId));
         userRepository.delete(user);
     }
 
     @Override
     public UserDto getUserById(String userId) {
         UUID id = UUID.fromString(userId);
-        User user = userRepository.findById(id).orElseThrow(()-> new RuntimeException("User not found associate with this id "+ userId));
+        User user = userRepository.findById(id).orElseThrow(()-> new ResourceNotFoundException("User not found associate with this id "+ userId));
         return modelMapper.map(user,UserDto.class);
     }
 
