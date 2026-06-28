@@ -4,6 +4,7 @@ import com.practice.auth_app.entities.User;
 import com.practice.auth_app.exceptions.ResourceNotFoundException;
 import com.practice.auth_app.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -18,7 +19,7 @@ public class CustomUserDetailService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(username).orElseThrow(() -> new ResourceNotFoundException("Invalid Email or Password!!!!!!!"));
+        User user = userRepository.findByEmail(username).orElseThrow(() -> new BadCredentialsException("Invalid Email or Password!!!!!!!"));
         return user;
     }
 }

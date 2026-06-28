@@ -1,5 +1,6 @@
 package com.practice.auth_app.controllers;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import com.practice.auth_app.dtos.LoginRequest;
 import com.practice.auth_app.dtos.TokenResponse;
 import com.practice.auth_app.dtos.UserDto;
@@ -57,13 +58,15 @@ public class AuthController {
 
     }
 
+
+    //authenticate part
     private Authentication authenticate (LoginRequest loginRequest){
-        try{
+      try{
+          return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(),loginRequest.password()));
 
-           return authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.email(),loginRequest.password()));
+      }catch (Exception e){
+          throw  new BadCredentialsException("Password or email is not valid!!!!");
+      }
 
-        }catch (Exception e){
-            throw new BadCredentialsException("Username or password is not valid");
-        }
     }
 }

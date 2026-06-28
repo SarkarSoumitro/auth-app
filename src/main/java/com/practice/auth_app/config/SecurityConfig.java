@@ -46,6 +46,10 @@ public class SecurityConfig {
                     response.setStatus(401);
                     response.setContentType("application/json");
                     String message ="Unauthorized access!!!!! "+authException.getMessage();
+                    String error =(String) request.getAttribute("Error");
+                    if (error!=null){
+                        message = error;
+                    }
                     Map<String, String> errorMap = Map.of(
                             "message", message,
                             "StatusCode", "401"
