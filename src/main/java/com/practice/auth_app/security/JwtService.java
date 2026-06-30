@@ -73,11 +73,11 @@ public class JwtService {
                 user.getRoles().stream().map((Roles)->Roles.getName()).toList();
 
         return Jwts.builder().
-                id(UUID.randomUUID().toString())
+                id(jti)
                 .subject(user.getId().toString())
                 .issuer(issuer)
                 .issuedAt(Date.from(now))
-                .expiration(Date.from(now.plusSeconds(accessTtlSeconds)))
+                .expiration(Date.from(now.plusSeconds(refreshTtlSeconds)))
                 .claim("typ","refresh")
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
