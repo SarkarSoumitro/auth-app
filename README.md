@@ -2,7 +2,6 @@
 
 A production-style authentication and authorization backend built with **Spring Boot 4**, **Spring Security**, and **JWT**, featuring role-based access control (RBAC), refresh token rotation, and an admin API for user/role management.
 
-Built as a hands-on deep dive into how real-world auth systems work under the hood — not just wiring up a tutorial, but understanding *why* each piece (access vs. refresh tokens, `@GeneratedValue` vs. manual IDs, `persist()` vs. `merge()`) behaves the way it does.
 
 ---
 
