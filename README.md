@@ -139,6 +139,6 @@ All admin endpoints require an authenticated request with `ADMIN` authority (`@P
 
 ## Author
 
-**Soumitro Sarkar (Sam)**
+**Soumitro Sarkar**
 B.Sc. in Computer Science & Engineering, United International University
 [GitHub](https://github.com/SarkarSoumitro) · [LinkedIn](https://linkedin.com)
