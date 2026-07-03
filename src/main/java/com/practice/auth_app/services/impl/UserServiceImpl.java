@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import com.practice.auth_app.entities.Roles;
+import com.practice.auth_app.repositories.RolesRepository;
+
+import java.util.HashSet;
+import java.util.Set;
+
 import java.util.UUID;
 
 @Service
@@ -21,23 +27,29 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
+    private final RolesRepository rolesRepository;
 
     @Override
     public UserDto createUser(UserDto userDto) {
         String email = normalizeEmail(userDto.getEmail());
 
-        if(email == null){
+        if (email == null) {
             throw new IllegalArgumentException("Email is required");
         }
-        if(userRepository.existsByEmail(email)){
+        if (userRepository.existsByEmail(email)) {
             throw new ResourceAlreadyExistException("Email already exist!");
         }
         User user = modelMapper.map(userDto, User.class);
         user.setEmail(email);
-        user.setProvider(userDto.getProvider()!=null? userDto.getProvider(): Provider.LOCAL);
+        user.setProvider(userDto.getProvider() != null ? userDto.getProvider() : Provider.LOCAL);
 
-        User savedUser= userRepository.save(user);
-        return modelMapper.map(savedUser,UserDto.class);
+        // assign default USER role
+        Roles userRole = rolesRepository.findByName("USER")
+                .orElseGet(() -> rolesRepository.save(Roles.builder().name("USER").build()));
+        user.setRoles(new HashSet<>(Set.of(userRole)));
+
+        User savedUser = userRepository.save(user);
+        return modelMapper.map(savedUser, UserDto.class);
     }
 
     @Override

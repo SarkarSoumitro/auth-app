@@ -10,6 +10,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @Builder
 public class RolesDto {
-    private UUID id = UUID.randomUUID();
+   // private UUID id = UUID.randomUUID();
+    private UUID id;
     private String name ;
 }

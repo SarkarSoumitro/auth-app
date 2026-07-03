@@ -82,6 +82,12 @@
 			<scope>runtime</scope>
 		</dependency>
 
+		<!-- Jackson for ObjectMapper -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+
         <!--mysql driver for database-->
 		<dependency>
 			<groupId>com.mysql</groupId>

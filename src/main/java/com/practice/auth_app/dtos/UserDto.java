@@ -21,12 +21,12 @@ public class UserDto {
     private String email;
     private String password;
     private String image;
-    private boolean enable;
+    private boolean enable = true;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdAt;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updatedAt;
     private Provider provider=Provider.LOCAL;
-    private Set<RolesDto> role = new HashSet<>();
+    private Set<RolesDto> roles = new HashSet<>();
 }

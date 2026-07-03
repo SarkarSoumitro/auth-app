@@ -28,8 +28,8 @@ public class GlobalExceptionHandler {
      })
     public ResponseEntity<ApiError> handleAuthException(Exception e , HttpServletRequest request){
         logger.info("Exception : {}", e.getClass().getName());
-        ApiError apiError = ApiError.of(HttpStatus.BAD_REQUEST.value(), "Bad Request", e.getMessage(), request.getRequestURI());
-      return ResponseEntity.badRequest().body(apiError);
+        ApiError apiError = ApiError.of(HttpStatus.UNAUTHORIZED.value(), "Unauthorized", e.getMessage(), request.getRequestURI());
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
     }
 
 

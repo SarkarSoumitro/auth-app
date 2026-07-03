@@ -16,7 +16,9 @@ import java.util.UUID;
 @Table(name = "Roles")
 public class Roles {
     @Id
-    private UUID id = UUID.randomUUID();
-    @Column(name = "Role",nullable = false)
-    private String name ;
+    @jakarta.persistence.GeneratedValue(strategy = jakarta.persistence.GenerationType.UUID)
+    private UUID id;
+
+    @Column(name = "Role", nullable = false, unique = true)
+    private String name;
 }
