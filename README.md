@@ -16,6 +16,12 @@ A production-style authentication and authorization backend built with **Spring 
 - **Validated request DTOs** — input validation via `spring-boot-starter-validation`
 - **Clean layered architecture** — controller → service → repository, with DTO/entity separation enforced via ModelMapper
 
+> 📊 **Architecture & flow diagram:** [View on Miro](https://miro.com/app/board/uXjVH-JM6mE=/?share_link_id=491842428276)
+
+- JWT-based authentication — stateless access tokens signed and verified via `jjwt`
+- Refresh token flow — long-lived refresh tokens for silent re-authentication without repeated logins
+...
+
 ---
 
 ## Tech Stack
