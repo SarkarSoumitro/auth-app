@@ -76,4 +76,11 @@ public class AdminController {
     public ResponseEntity<RolesDto> createRole(@RequestBody RolesDto roleDto) {
         return ResponseEntity.ok(adminService.createRole(roleDto));
     }
+
+    @DeleteMapping("/roles/{roleName}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<Void> deleteRole(@PathVariable String roleName) {
+        adminService.deleteRole(roleName);
+        return ResponseEntity.noContent().build();
+    }
 }

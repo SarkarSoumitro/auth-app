@@ -125,4 +125,12 @@ public class AdminServiceImpl implements AdminService {
         Roles saved = rolesRepository.save(role);
         return new RolesDto(saved.getId(), saved.getName());
     }
+
+    @Override
+    @Transactional
+    public void deleteRole(String roleName) {
+        Roles role = rolesRepository.findByName(roleName)
+                .orElseThrow(() -> new ResourceNotFoundException("Role not found: " + roleName));
+        rolesRepository.delete(role);
+    }
 }

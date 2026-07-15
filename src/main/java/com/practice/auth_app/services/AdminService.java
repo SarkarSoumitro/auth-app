@@ -17,4 +17,5 @@ public interface AdminService {
     void revokeRefreshTokensForUser(String email);
     List<RolesDto> getAllRoles();
     RolesDto createRole(RolesDto roleDto);
+    void deleteRole(String roleName);
 }
