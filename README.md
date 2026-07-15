@@ -135,7 +135,7 @@ All admin endpoints require an authenticated request with `ADMIN` authority (`@P
 
 ## Roadmap
 
-- [✅] Swagger / OpenAPI documentation
+- ✅ Swagger / OpenAPI documentation
 - [ ] Integration tests for the admin role-management flow
 - [ ] Access token revocation (blacklist) for immediate session termination, not just refresh token revocation
 - [ ] Rate limiting on `/auth/login` and `/auth/refresh`
